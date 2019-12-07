@@ -1,5 +1,20 @@
 #!/bin/bash
 
+"""
+catnginx/sites-available/darin
+
+server {
+        listen 80;
+        listen [::]:80;
+        root /var/www/html/darin;
+        index index.html index.htm index.nginx-debian.html;
+        server_name darin.htp-ipv6.tech;
+        location / {
+                try_files $uri $uri/ =404;
+        }
+}
+"""
+
 #file that is modified :
 #/etc/nginx/sites-available/username
 #/etc/nginx/sites-enabled/username
