@@ -15,6 +15,29 @@ server {
 }
 """
 
+"""
+cat /var/lib/bind/htp-ipv6.tech
+$ttl 3600
+htp-ipv6.tech.  IN      SOA     a.htp-ipv6.tech. admin.quel.tech. (
+                        0204061219
+                        3600
+                        3600
+                        3600
+                        3600 )
+
+htp-ipv6.tech.          IN      NS      a.htp-ipv6.tech.
+htp-ipv6.tech.          IN      NS      b.htp-ipv6.tech.
+a.htp-ipv6.tech.        IN      AAAA    2400:6180:0:d0::f8:d001
+b.htp-ipv6.tech.        IN      AAAA    2400:6180:0:d0::f8:d001
+a.htp-ipv6.tech.        IN      A       128.199.252.56
+b.htp-ipv6.tech.        IN      A       128.199.252.56
+htp-ipv6.tech.          IN      AAAA    2400:6180:0:d0::f8:d001
+htp-ipv6.tech.          IN      A       128.199.252.56
+htp-ipv6.tech.          IN      MX      10 mail.htp-ipv6.tech.
+mail.htp-ipv6.tech.     IN      AAAA    2400:6180:0:d0::f8:d001
+mail.htp-ipv6.tech.     IN      A       128.199.252.56
+"""
+
 #file that is modified :
 #/etc/nginx/sites-available/username
 #/etc/nginx/sites-enabled/username
