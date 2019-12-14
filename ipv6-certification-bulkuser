@@ -1,0 +1,85 @@
+#!/bin/bash
+
+#file that is modified :
+#/etc/nginx/sites-available/username
+#/etc/nginx/sites-enabled/username
+#/var/www/html/username
+#/var/lib/bind/username
+#/var/lib/bind/htp-ipv6.tech
+#/etc/bind/named.conf.local
+#/home/username
+#userdel 
+
+LISTUSER=$(awk -F':' '{ print $1}' /etc/passwd | sed 1,31d | tr '\n' ' ,')
+
+echo -e "\n"
+echo -e "==================================================\n"
+echo -e "User already registered is : \n"
+echo -e "${LISTUSER} \n"
+sleep 2
+echo -e "==================================================\n"
+echo -e "Step 1. Adding Bulkuser. Please wait for a moment\n"
+echo -e "==================================================\n"
+for USERNAME in `cat listuser.txt`; do echo -e "Sementara123!\nSementara123!" | adduser --gecos "" ${USERNAME}; done
+sleep 3
+
+echo -e "==================================================\n"
+echo -e "Step 2. Restart Postfix \n"
+systemctl restart postfix 
+sleep 3
+
+echo -e "==================================================\n"
+echo -e "Step 3. Adding Nginx Config \n"
+for USERNAME in `cat listuser.txt`; do cp /etc/nginx/sites-available/darin /etc/nginx/sites-available/${USERNAME}; done
+for USERNAME in `cat listuser.txt`; do sed -i "s/darin/${USERNAME}/g" /etc/nginx/sites-available/${USERNAME}; done
+for USERNAME in `cat listuser.txt`; do ln -s /etc/nginx/sites-available/${USERNAME} /etc/nginx/sites-enabled/; done
+sleep 3
+
+echo -e "==================================================\n"
+echo -e "Step 4. Adding Subdomain Document Root\n"
+for USERNAME in `cat listuser.txt`; do mkdir /var/www/html/${USERNAME}; done
+for USERNAME in `cat listuser.txt`; do cp /var/www/html/darin/index.nginx-debian.html /var/www/html/${USERNAME}/; done
+for USERNAME in `cat listuser.txt`; do chmod -R 777 /var/www/html/${USERNAME}; done
+for USERNAME in `cat listuser.txt`; do chown -R ${USERNAME}:${USERNAME} /var/www/html/${USERNAME}; done
+sleep 3
+
+echo -e "==================================================\n"
+echo -e "Step 5. Restart Nginx \n"
+systemctl restart nginx
+sleep 3
+
+echo -e "==================================================\n"
+echo -e "Step 6. Adding Zone for DNS Server \n"
+for USERNAME in `cat listuser.txt`; do cp /var/lib/bind/darin.htp-ipv6.tech.hosts /var/lib/bind/${USERNAME}.htp-ipv6.tech.hosts; done
+for USERNAME in `cat listuser.txt`; do sed -i "s/darin/${USERNAME}/g" /var/lib/bind/${USERNAME}.htp-ipv6.tech.hosts; done
+sleep 3
+
+echo -e "\n\n"
+for USERNAME in `cat listuser.txt`
+do 
+    echo "zone "\""${USERNAME}.htp-ipv6.tech"\"" {" >> /etc/bind/named.conf.local
+    echo '        type master;' >> /etc/bind/named.conf.local
+    echo "        file "\""/var/lib/bind/${USERNAME}.htp-ipv6.tech.hosts"\"";" >> /etc/bind/named.conf.local
+    echo '        };' >> /etc/bind/named.conf.local
+    echo -e "\n\n"
+    echo "${USERNAME}.htp-ipv6.tech.      IN      AAAA    2400:6180:0:d0::f8:d001" >> /var/lib/bind/htp-ipv6.tech.hosts
+    echo "a.${USERNAME}.htp-ipv6.tech.      IN      AAAA    2400:6180:0:d0::f8:d001" >> /var/lib/bind/htp-ipv6.tech.hosts
+    echo "b.${USERNAME}.htp-ipv6.tech.      IN      AAAA    2400:6180:0:d0::f8:d001" >> /var/lib/bind/htp-ipv6.tech.hosts
+    echo "${USERNAME}.htp-ipv6.tech.  IN      NS      a.${USERNAME}.htp-ipv6.tech." >> /var/lib/bind/htp-ipv6.tech.hosts
+    echo "${USERNAME}.htp-ipv6.tech.  IN      NS      b.${USERNAME}.htp-ipv6.tech." >> /var/lib/bind/htp-ipv6.tech.hosts
+done
+sleep 3
+
+systemctl restart bind9
+sleep 3
+
+echo -e "==================================================\n"
+echo -e "Step 7. Finish, please verify\n"
+echo -e "==================================================\n"
+echo -e "Execute this command "
+echo -e "- systemctl restart bind9"
+echo -e "- named-checkzone htp-ipv6.tech /var/lib/bind/htp-ipv6.tech.hosts"
+echo -e "- systemctl status bind9"
+echo -e "- dig @localhost ${USERNAME}.htp-ipv6.tech AAAA +short"
+echo -e "- dig @localhost ${USERNAME}.htp-ipv6.tech NS +short"
+echo -e "\n"
