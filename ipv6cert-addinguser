@@ -25,15 +25,15 @@ htp-ipv6.tech.  IN      SOA     a.htp-ipv6.tech. admin.quel.tech. (
 
 htp-ipv6.tech.          IN      NS      a.htp-ipv6.tech.
 htp-ipv6.tech.          IN      NS      b.htp-ipv6.tech.
-a.htp-ipv6.tech.        IN      AAAA    2400:6180:0:d0::f8:xxxx
-b.htp-ipv6.tech.        IN      AAAA    2400:6180:0:d0::f8:xxxx
-a.htp-ipv6.tech.        IN      A       128.199.252.xx
-b.htp-ipv6.tech.        IN      A       128.199.252.xx
-htp-ipv6.tech.          IN      AAAA    2400:6180:0:d0::f8:xxxx
-htp-ipv6.tech.          IN      A       128.199.252.xx
+a.htp-ipv6.tech.        IN      AAAA    2400:6180:0:d1::781:8001
+b.htp-ipv6.tech.        IN      AAAA    2400:6180:0:d1::781:8001
+a.htp-ipv6.tech.        IN      A       134.209.99.76
+b.htp-ipv6.tech.        IN      A       134.209.99.76
+htp-ipv6.tech.          IN      AAAA    2400:6180:0:d1::781:8001
+htp-ipv6.tech.          IN      A       134.209.99.76
 htp-ipv6.tech.          IN      MX      10 mail.htp-ipv6.tech.
-mail.htp-ipv6.tech.     IN      AAAA    2400:6180:0:d0::f8:xxxx
-mail.htp-ipv6.tech.     IN      A       128.199.252.xx
+mail.htp-ipv6.tech.     IN      AAAA    2400:6180:0:d1::781:8001
+mail.htp-ipv6.tech.     IN      A       134.209.99.76
 =======================================================================
 cat /var/lib/bind/darin.htp-ipv6.tech.hosts
 $ttl 3600
@@ -44,11 +44,11 @@ darin.htp-ipv6.tech.  IN      SOA     a.darin.htp-ipv6.tech. admin.quel.tech. (
                         3600
                         3600 )
 
-darin.htp-ipv6.tech.  IN      AAAA    2400:6180:0:d0::f8:xxxx
+darin.htp-ipv6.tech.  IN      AAAA    2400:6180:0:d1::781:8001
 darin.htp-ipv6.tech.  IN      NS      a.darin.htp-ipv6.tech.
 darin.htp-ipv6.tech.  IN      NS      b.darin.htp-ipv6.tech.
-a.darin.htp-ipv6.tech.      IN      AAAA    2400:6180:0:d0::f8:xxxx
-b.darin.htp-ipv6.tech.      IN      AAAA    2400:6180:0:d0::f8:xxxx
+a.darin.htp-ipv6.tech.      IN      AAAA    2400:6180:0:d1::781:8001
+b.darin.htp-ipv6.tech.      IN      AAAA    2400:6180:0:d1::781:8001
 =======================================================================
 SAMPLE CONFIGURATION END HERE
 =======================================================================
@@ -118,9 +118,9 @@ echo "        file "\""/var/lib/bind/${USERNAME}.htp-ipv6.tech.hosts"\"";" >> /e
 echo '        };' >> /etc/bind/named.conf.local
 
 echo -e "\n\n"
-echo "${USERNAME}.htp-ipv6.tech.      IN      AAAA    2400:6180:0:d0::f8:d001" >> /var/lib/bind/htp-ipv6.tech.hosts
-echo "a.${USERNAME}.htp-ipv6.tech.      IN      AAAA    2400:6180:0:d0::f8:d001" >> /var/lib/bind/htp-ipv6.tech.hosts
-echo "b.${USERNAME}.htp-ipv6.tech.      IN      AAAA    2400:6180:0:d0::f8:d001" >> /var/lib/bind/htp-ipv6.tech.hosts
+echo "${USERNAME}.htp-ipv6.tech.      IN      AAAA    2400:6180:0:d1::781:8001" >> /var/lib/bind/htp-ipv6.tech.hosts
+echo "a.${USERNAME}.htp-ipv6.tech.      IN      AAAA    2400:6180:0:d1::781:8001" >> /var/lib/bind/htp-ipv6.tech.hosts
+echo "b.${USERNAME}.htp-ipv6.tech.      IN      AAAA    2400:6180:0:d1::781:8001" >> /var/lib/bind/htp-ipv6.tech.hosts
 echo "${USERNAME}.htp-ipv6.tech.  IN      NS      a.${USERNAME}.htp-ipv6.tech." >> /var/lib/bind/htp-ipv6.tech.hosts
 echo "${USERNAME}.htp-ipv6.tech.  IN      NS      b.${USERNAME}.htp-ipv6.tech." >> /var/lib/bind/htp-ipv6.tech.hosts
 sleep 3
